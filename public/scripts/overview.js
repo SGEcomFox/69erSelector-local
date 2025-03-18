@@ -31,6 +31,10 @@ function buildDom() {
     $('#deleteButton').click(function() {
         deleteSelected(activeId);
     })
+    $('#startButton').click(function() {
+        startGame(savedImagesJ,savedImagesL)
+    })
+    checkStartCondition();  
 }
 
 function storeLocal(arrayName, array) {
@@ -84,6 +88,13 @@ function imageSelect(element) {
         console.log(selectedImages);
     }    
 }
+function checkStartCondition() {
+    if(savedImagesJ.length == savedImagesL.length && savedImagesJ.length % 2 === 0 && savedImagesJ.length>0) {
+        $('#startButton').css("display", "block");
+    } else {
+        $('#startButton').css("display", "none");
+    }
+}
 
 function deleteSelected(id) {
     if(id === "j") {
@@ -98,5 +109,10 @@ function deleteSelected(id) {
         buildCollage(savedImagesL, "l")
         $('#lukasButton').html("Lukas | "+savedImagesL.length);  
     }   
-    selectedImages = selectedImages.filter(item => savedImagesJ.includes(item) || savedImagesL.includes(item));   
+    selectedImages = selectedImages.filter(item => savedImagesJ.includes(item) || savedImagesL.includes(item)); 
+    checkStartCondition();  
+}
+
+function startGame() {
+    window.location.href = "game.html";    
 }

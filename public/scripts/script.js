@@ -36,7 +36,7 @@ function buildDom() {
         savedImagesJ = [];
         savedImagesL = [];
         openDialogBox("clear");
-        console.log("cleared");
+        $('#main > img').css("display", "none")
     });
     $('#linkButton').click(followLink); 
     $('#fileInput').change(async function(event) {
@@ -44,7 +44,7 @@ function buildDom() {
             // Call importHTML with the event and the current bookmarks
             currentImage = 0;
             localStorage.setItem('currentImage', currentImage);
-            await importHTML(event);          
+            await importHTML(event);         
         } catch (error) {
             console.error('Error updating bookmarks:', error);
         }
@@ -229,6 +229,7 @@ async function importHTML(event) {
         length = bookmarks.length;
         updateCounter(0, length)
         console.log('Bookmarks imported successfully:', bookmarks);
+        $('#main > img').css("display", "block"); 
     } catch (error) {
         console.error('Error processing the HTML file:', error);
     }
