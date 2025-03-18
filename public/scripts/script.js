@@ -27,7 +27,6 @@ function buildDom() {
     $('#fileInput').change(async function(event) {
         try {
             // Call importHTML with the event and the current bookmarks
-            localStorage.clear();
             currentImage = 0;
             localStorage.setItem('currentImage', currentImage);
             await importHTML(event);          
