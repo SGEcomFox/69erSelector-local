@@ -1,7 +1,7 @@
 body {
   display: flex;
-  justify-content: center;
-  align-items: center;  
+  justify-content: flex-start;
+  align-items: stretch;  
   font-family: sans-serif;
   height: 100vh;
   padding: 0;
@@ -9,14 +9,43 @@ body {
   background: rgb(70,70,70);
   background: linear-gradient(90deg, rgba(70,70,70,1) 0%, rgba(150,150,150,1) 50%, rgba(70,70,70,1) 100%);
 }
+
 #sideBar {
-  flex: 0 0 auto;
+  left: 0;
+  top: 0;
+  display: flex;
   height: 100%;
+  width: 40vw;
+}
+
+#cornerContainer {
+  left: 0;
+  top: 0;
+  position:fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width:auto;
+}
+
+.cornerButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12vw;
+  height: 5vh;
+  border: none;
+  border-radius: 15px;
+  margin: 0.2vh 0;
+  background-color: rgb(60, 60, 60);
+  font-size: 3.5vh;
+  color: white;
 }
 #main {
   display: flex;
   justify-content: center;
-  flex: 1;
+  flex-grow: 1;
   height: 100%;
 }
 .mainImage {
@@ -40,26 +69,7 @@ body {
   font-size: 5vh;
   padding: 0 3vw;
 }
-#cornerContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
-.cornerButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 12vw;
-  height: 5vh;
-  border: none;
-  border-radius: 15px;
-  margin: 0.2vh 0;
-  background-color: rgb(60, 60, 60);
-  font-size: 3.5vh;
-  color: white;
-}
 
 .counterZone {
   display: flex;
@@ -135,4 +145,29 @@ body {
   font-size: 6vh;
   color: white;
   padding: 0 3vw;
+}
+
+.collageZone {
+  width:33%;
+  margin: 0 0.2vw;
+  display:flex;
+  flex-direction: column;
+}
+
+.collageImage {
+  margin: 0.2vw 0;
+  width: 100%;
+  height: auto;
+  object-fit: contain
+}
+
+.selected {
+  border-color:rgb(0, 120, 218);
+  border-style: solid;
+  border-width: 0.4em;
+  box-sizing: border-box;
+}
+
+#deleteButton {
+  display: none;
 }
