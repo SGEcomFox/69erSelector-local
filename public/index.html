@@ -1,31 +1,39 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="generator" content="GitLab Pages">
-    <title>69er Selector Local</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="scripts/script.js" defer></script>
-  </head>
-  <body>
-    <input type="file" id="fileInput" style="display: none;" accept=".html">  
-    <div id="dialogBox" name="dialogBox" class="dialogBox">
-      <label id="dialogBoxText" name="dialogBoxText" class="dialogBoxText"> saved for Janik </label>
-    </div>
-    <div id="counterZone" name="counterZone" class="counterZone">
-      <div id="indexZone">
-        <input id="indexInput" class="indexInput" type="text">
-        <label id="index" name="index" class="index"></label>
-      </div>      
-      <label id="counter" name="counter" class="counter"></label>
-    </div>
-    <button id="importButton" name="importButton" class="cornerButton"> Import </button>
-    <button id="overviewButton" name="overviewButton" class="cornerButton"> Overview </button>
-    <button id="linkButton" name="linkButton" class="linkButton"> 
-      <label id="linkText" name="linkText" class="linkText"> link to original  </label>
-    </button>     
-    <img src="/ressources/placeholder.jpg" id="mainImage" name="mainImage" class="mainImage">   
-  </body>
+    <head>
+        <meta charset="utf-8">
+        <meta name="generator" content="GitLab Pages">
+        <title>69er Selector Local</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="scripts/script.js" defer></script>
+    </head>
+    <body>
+        <input type="file" id="fileInput" style="display: none;" accept=".html">  
+        <div id="dialogBox" name="dialogBox" class="dialogBox">
+            <label id="dialogBoxText" name="dialogBoxText" class="dialogBoxText"> saved for Janik </label>
+        </div>
+        <div id="sideBar" class="sideBar">
+            <div id="cornerContainer">
+                <div id="counterZone" name="counterZone" class="counterZone">
+                    <div id="indexZone">
+                        <input id="indexInput" class="indexInput" type="text">
+                        <label id="index" name="index" class="index"></label>
+                    </div>      
+                    <label id="counter" name="counter" class="counter"></label>
+                </div>
+                <button id="importButton" name="importButton" class="cornerButton"> Import </button>
+                <button id="overviewButton" name="overviewButton" class="cornerButton"> Overview </button>
+                <button id="clearButton" name="clearButton" class="cornerButton"> Clear </button>
+            </div>
+        </div>
+        <div id="main" class="main">
+            <img src="/ressources/placeholder.jpg" id="mainImage" name="mainImage" class="mainImage">   
+        </div>
+        
+        <button id="linkButton" name="linkButton" class="linkButton"> 
+            <label id="linkText" name="linkText" class="linkText"> link to original  </label>
+        </button>          
+    </body>
 </html>
 

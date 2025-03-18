@@ -1,12 +1,18 @@
-var currentImage = localStorage.getItem('currentImage');
+var currentImage;
 var length;
 var bookmarks;
-var savedImagesJ = loadLocal("savedImagesJ");
-var savedImagesL = loadLocal("savedImagesL");
+var savedImagesJ;
+var savedImagesL;
 
 
 $(document).ready(async function () {
-    //console.log('DOM fully loaded');   
+    //console.log('DOM fully loaded'); 
+    savedImagesJ = loadLocal("savedImagesJ");
+    savedImagesL = loadLocal("savedImagesL");
+    bookmarks = loadLocal("importBookmarks");
+    length = bookmarks.length; 
+    currentImage = Number(localStorage.getItem("currentImage")) || 0;
+    
     buildDom();
 });
 
@@ -22,7 +28,16 @@ function buildDom() {
     $('#indexInput').on("keyup", function(event) {
         enterInput(event); // Pass the event to the function
     }); 
-    $('#overviewButton').click();
+    $('#overviewButton').click(function(){
+        window.location.href = "overview.html";
+    });
+    $('#clearButton').click(function(){
+        localStorage.clear();
+        savedImagesJ = [];
+        savedImagesL = [];
+        openDialogBox("clear");
+        console.log("cleared");
+    });
     $('#linkButton').click(followLink); 
     $('#fileInput').change(async function(event) {
         try {
@@ -39,15 +54,18 @@ function buildDom() {
             case 37: updateCurrentImage("left"); break;
             case 39: updateCurrentImage("right"); break;
             case 74: saveImage("j"); break;
-            case 76: saveImage("l"); break;
-            //default: console.log(event.which);        
+            case 76: saveImage("l"); break;     
         }
-    });     
+    });
+    updateCurrentImage(currentImage);
+    console.log(typeof currentImage)     
 }
 
 function storeLocal(arrayName, array) {
     const jsonArray = JSON.stringify(array);    
     localStorage.setItem(arrayName, jsonArray);
+    console.log(arrayName+" saved to local Storage");
+    console.log(array);
 }
 
 function loadLocal(name) {
@@ -80,6 +98,7 @@ function updateCurrentImage(value) {
         changeImage(bookmarks, currentImage);        
     }
     if(typeof value === 'number' && value >= 0 && value < length) {
+        console.log("passed");
         currentImage = value;
         localStorage.setItem('currentImage', currentImage);
         changeImage(bookmarks, currentImage);
@@ -120,15 +139,19 @@ function saveImage(name) {
         if (!savedImagesJ.includes(imgSrc)) {
             savedImagesJ.push(imgSrc);
             storeLocal("savedImagesJ", savedImagesJ);
-            console.log(savedImagesJ);
-        }       
+            openDialogBox("download", "j");
+        }   else {
+            openDialogBox("download", "x"); 
+        }   
     }
     if(name == "l") {
         if (!savedImagesL.includes(imgSrc)) {
             savedImagesL.push(imgSrc);
             storeLocal("savedImagesL", savedImagesL);
-            console.log(savedImagesJ);
-        }      
+            openDialogBox("download", "l");
+        }   else {
+            openDialogBox("download", "x");  
+        }   
     }
     
 }
@@ -142,6 +165,9 @@ function openDialogBox(type, additional) {
         if(additional == "l") {
             message = "saved for Lukas"
         }
+        if(additional == "x") {
+            message = "already saved"
+        }
         if(message) {
             $('#dialogBoxText').html(message);
             $('#dialogBox')
@@ -149,6 +175,14 @@ function openDialogBox(type, additional) {
                 .delay(3000)                     // Wait for 4 seconds
                 .animate({ opacity: 0 }, 0);   // Fade back to 0% over 500ms
         }
+    }
+    if(type === "clear") {
+        message = "Cleared";
+        $('#dialogBoxText').html(message);
+            $('#dialogBox')
+                .animate({ opacity: 1 }, 0)      // Instantly set opacity to 100%
+                .delay(3000)                     // Wait for 4 seconds
+                .animate({ opacity: 0 }, 0);   // Fade back to 0% over 500ms
     }
     if(type === "localFile") {
         message = "local file";  
@@ -176,7 +210,6 @@ function enterInput(event) {
 }
 
 //importHandler Part
-
 async function importHTML(event) {
     const file = event.target.files[0];
     // Check if the correct file is selected
@@ -191,6 +224,7 @@ async function importHTML(event) {
     try {
         const htmlContent = await readFile(file);
         bookmarks = convertHTMLtoArray(htmlContent);
+        storeLocal("importBookmarks", bookmarks);
         changeImage(bookmarks, 0);
         length = bookmarks.length;
         updateCounter(0, length)
