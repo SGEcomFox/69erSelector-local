@@ -96,11 +96,11 @@ body {
   color: rgb(0, 120, 218);
   cursor:pointer;
 }
-#downloadLocationButton {
+#overviewButton {
   top: 7.2vw;
   left: 0.5vh;
 }
-#downloadLocationButton:hover {
+#overviewButton:hover {
   color: rgb(0, 120, 218);
   cursor:pointer;
 }

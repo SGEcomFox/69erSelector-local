@@ -1,6 +1,9 @@
 var currentImage = localStorage.getItem('currentImage');
 var length;
 var bookmarks;
+var savedImagesJ = loadLocal("savedImagesJ");
+var savedImagesL = loadLocal("savedImagesL");
+
 
 $(document).ready(async function () {
     //console.log('DOM fully loaded');   
@@ -19,11 +22,12 @@ function buildDom() {
     $('#indexInput').on("keyup", function(event) {
         enterInput(event); // Pass the event to the function
     }); 
-    $('#downloadLocationButton').click(setAnchor);
+    $('#overviewButton').click();
     $('#linkButton').click(followLink); 
     $('#fileInput').change(async function(event) {
         try {
             // Call importHTML with the event and the current bookmarks
+            localStorage.clear();
             currentImage = 0;
             localStorage.setItem('currentImage', currentImage);
             await importHTML(event);          
@@ -42,15 +46,22 @@ function buildDom() {
     });     
 }
 
-function setAnchor() {
-    const blob = new Blob([''], { type: 'text/plain' }); 
-    const downloadLink = document.createElement('a');  
-    const url = URL.createObjectURL(blob); 
-    downloadLink.href = url;
-    downloadLink.download = 'anchor.txt'; 
-    downloadLink.click();
-    URL.revokeObjectURL(url);
+function storeLocal(arrayName, array) {
+    const jsonArray = JSON.stringify(array);    
+    localStorage.setItem(arrayName, jsonArray);
 }
+
+function loadLocal(name) {
+    let array = localStorage.getItem(name);
+    if (array) {  
+        return JSON.parse(array);
+    } else {
+        // If no item is found, return an empty array (or handle as needed)
+        console.error("No data found for key:", name);
+        return [];
+    }    
+}
+
 function followLink(){
     var url = $('#mainImage').attr('src');
         window.open(url, '_blank');
@@ -106,33 +117,21 @@ function updateCounter(current, max) {
 
 function saveImage(name) {
     const imgSrc = $('#mainImage').attr('src');
-
-    fetch(imgSrc)
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.blob();
-        })
-        .then((blob) => {
-            const blobUrl = URL.createObjectURL(blob);
-
-            const anchor = document.createElement('a');
-            anchor.href = blobUrl;
-            anchor.download = name || 'downloaded-image.jpg'; // Recommended file name
-            document.body.appendChild(anchor);
-            anchor.click();
-            document.body.removeChild(anchor);
-
-            // Revoke the blob URL to release memory
-            URL.revokeObjectURL(blobUrl);
-            setTimeout(() => {
-                openDialogBox("download", name);
-            }, 500); // Adjust the delay if needed
-        })
-        .catch((error) => {
-            console.error('There was a problem with the fetch operation:', error);
-        });
+    if(name == "j") {
+        if (!savedImagesJ.includes(imgSrc)) {
+            savedImagesJ.push(imgSrc);
+            storeLocal("savedImagesJ", savedImagesJ);
+            console.log(savedImagesJ);
+        }       
+    }
+    if(name == "l") {
+        if (!savedImagesL.includes(imgSrc)) {
+            savedImagesL.push(imgSrc);
+            storeLocal("savedImagesL", savedImagesL);
+            console.log(savedImagesJ);
+        }      
+    }
+    
 }
 
 function openDialogBox(type, additional) {
