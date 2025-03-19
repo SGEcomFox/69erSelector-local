@@ -107,6 +107,7 @@ async function startRound() {
     if(winnerJ.length %2 == 0 && winnerL.length %2 == 0) {
         savedImagesJ = winnerJ;
         savedImagesL = winnerL;
+        activePlayerArray = winnerJ;
         $('#advanceButton').css('display', 'block');
     } else if(savedImagesJ.length == 1 && savedImagesL.length == 1){
         console.log("finished")
