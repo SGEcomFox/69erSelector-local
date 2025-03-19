@@ -105,6 +105,8 @@ async function startRound() {
         i++
     }
     if(winnerJ.length %2 == 0 && winnerL.length %2 == 0) {
+        savedImagesJ = winnerJ;
+        savedImagesL = winnerL;
         $('#advanceButton').css('display', 'block');
     } else if(savedImagesJ.length == 1 && savedImagesL.length == 1){
         console.log("finished")
@@ -178,7 +180,6 @@ function changeActivePlayer() {
     updateLabel(roundOf.length);
 }
 function updateArrays(element) {
-    console.log("roundOf:", roundOf.length);
     activeWinner.push(element);    
     // Find the index of the element
     const index = activePlayerArray.indexOf(element);    
@@ -186,7 +187,6 @@ function updateArrays(element) {
     if (index !== -1) {
         activePlayerArray.splice(index, 1);
     }
-    console.log("roundOf:", roundOf.length);
     return;
 }
 
