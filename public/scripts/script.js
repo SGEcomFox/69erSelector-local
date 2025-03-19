@@ -32,7 +32,11 @@ function buildDom() {
         window.location.href = "overview.html";
     });
     $('#clearButton').click(function(){
+        bookmarks = [];
+        savedImagesJ = [];
+        savedImagesL = [];
         localStorage.clear();
+        sessionStorage.clear()
         savedImagesJ = [];
         savedImagesL = [];
         openDialogBox("clear");
@@ -209,10 +213,9 @@ function enterInput(event) {
     }  
 }
 
-//importHandler Part
 async function importHTML(event) {
     const file = event.target.files[0];
-    // Check if the correct file is selected
+
     if (!file) {
         console.error('No file selected.');
         return;
@@ -221,19 +224,26 @@ async function importHTML(event) {
         console.error('Please select an HTML file.');
         return;
     }
+
     try {
         const htmlContent = await readFile(file);
         bookmarks = convertHTMLtoArray(htmlContent);
+        
+        
+        // **Reset length before assigning new bookmarks**
+        length = bookmarks.length;
+
         storeLocal("importBookmarks", bookmarks);
         changeImage(bookmarks, 0);
-        length = bookmarks.length;
-        updateCounter(0, length)
+        updateCounter(0, length);
+        
         console.log('Bookmarks imported successfully:', bookmarks);
         $('#main > img').css("display", "block"); 
     } catch (error) {
         console.error('Error processing the HTML file:', error);
     }
 }
+
 
 function readFile(file) {
     return new Promise((resolve, reject) => {
