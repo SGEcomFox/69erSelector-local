@@ -44,6 +44,17 @@ function storeLocal(arrayName, array) {
     console.log(array);
 }
 
+function updateLocal(id, array) {
+    const jsonArray = JSON.stringify(array);    
+    
+    if(id === "j") {
+        localStorage.setItem("savedImagesJ", jsonArray);
+    }
+    if(id === "l") { 
+        localStorage.setItem("savedImagesL", jsonArray);
+    } 
+}
+
 function loadLocal(name) {
     let array = localStorage.getItem(name);
     if (array) {  
@@ -57,6 +68,8 @@ function loadLocal(name) {
 
 function buildCollage(array, newActive) {
     activeId = newActive;
+    $('#dialogBox').empty();
+    $('#addButton').length > 0 && $('#addButton').remove();
     $('.collageZone').find('img').remove();
     $('#deleteButton').css('display', 'none'); 
     for(let i=0; i<array.length; i++) {
@@ -68,6 +81,16 @@ function buildCollage(array, newActive) {
         let targetZone = '#collageZone' + ((i % 3) + 1); // This will cycle between 1, 2, and 3
         $(targetZone).append(img);    
     }
+    let plusImg = $('<img>', {
+        src: './ressources/plusIcon.png',
+        id: "addButton",
+        class: "addButton"
+    });
+    let targetZone = '#collageZone' + ((array.length % 3) + 1); // Continue cycling to the next zone
+    $(targetZone).append(plusImg);
+    $('#addButton').click(function() {
+        addImage(array)
+    });
 }
 
 function imageSelect(element) { 
@@ -97,6 +120,7 @@ function checkStartCondition() {
 }
 
 function deleteSelected(id) {
+    console.log("trying to delete")
     if(id === "j") {
         savedImagesJ = savedImagesJ.filter(item => !selectedImages.includes(item)); 
         storeLocal("savedImagesJ", savedImagesJ);
@@ -104,13 +128,67 @@ function deleteSelected(id) {
         $('#janikButton').html("Janik | "+savedImagesJ.length);
     }
     if(id === "l") {
+        console.log("l")
         savedImagesL = savedImagesL.filter(item => !selectedImages.includes(item));
         storeLocal("savedImagesL", savedImagesL);
         buildCollage(savedImagesL, "l")
         $('#lukasButton').html("Lukas | "+savedImagesL.length);  
-    }   
+    }  
+    console.log("failed") 
     selectedImages = selectedImages.filter(item => savedImagesJ.includes(item) || savedImagesL.includes(item)); 
     checkStartCondition();  
+}
+
+$('#addButton').click(function() {
+    addImage(array);
+});
+
+function addImage(array) {
+    $('#dialogBox').empty();
+    // Create the input field and submit button
+    let inputField = $('<input>', {
+        type: 'text',
+        id: 'urlInput',
+        placeholder: 'Enter image URL'
+    });
+
+    let submitButton = $('<button>', {
+        text: 'Add Image',
+        id: 'submitButton'
+    });
+
+    // Show the dialog box with the input field and button
+    $('#dialogBox').css('opacity', '100%');
+    $('#dialogBoxText').text('Enter the image URL:');
+    $('#dialogBox').append(inputField, submitButton);
+
+    // Handle the submit button click event
+    submitButton.click(function() {
+        let imageUrl = inputField.val(); // Get the URL entered by the user
+        if (array.includes(imageUrl)) {
+            alert('This image is already in the collage!');
+            return;
+        }
+        if (imageUrl) {
+            // Add the URL to the array
+            array.push(imageUrl);
+            updateLocal(activeId, array);
+            // Call buildCollage to update the collage
+            buildCollage(array);
+
+            // Clear the input field and hide the dialog box
+            inputField.val('');
+
+            // Remove the input field and submit button after submission
+            inputField.remove();
+            submitButton.remove();
+        } else {
+            alert('Please enter a valid URL.');
+        }
+        $('#dialogBox').css('opacity', '0');
+        $('#dialogBox').empty();
+    });
+
 }
 
 function startGame() {

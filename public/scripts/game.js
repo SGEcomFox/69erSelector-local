@@ -8,6 +8,8 @@ var activePlayerArray = [];
 var activeArray = [];
 var activeWinner = [];
 var currentImage = 0;
+let onKeyPress;
+let roundOf;
 
 $(document).ready(async function () {
     savedImagesJ = loadLocal("savedImagesJ");
@@ -29,6 +31,14 @@ function buildDom() {
             case 39: updateCurrentImage("right"); break;
         }
     });
+    $('#jokerButton').click(function(){
+        startJokerRound();
+    })
+    $('#advanceButton').click(function(){
+        savedImagesJ = winnerJ;
+        savedImagesL = winnerL;
+        startRound();
+    })
 }
 
 function loadLocal(name) {
@@ -57,11 +67,11 @@ function shuffleArray(array) {
 }
 
 function updateCurrentImage(value) {
-    if (value === "left") {
+    if (value === "left") {    
         currentImage = (currentImage > 0) ? currentImage - 1 : activeArray.length - 1;
     } 
-    if (value === "right") {
-        currentImage = (currentImage + 1) % activeArray.length;
+    if (value === "right") {        
+        currentImage = (currentImage + 1) % activeArray.length;        
     }
     changeImage(activeArray[currentImage]);
 }
@@ -71,14 +81,14 @@ function changeImage(url) {
 }
 
 async function startGame() {
-    console.log(savedImagesJ.length, savedImagesL.length)
-    while(savedImagesJ.length>0 && savedImagesL.length>0) {
-        await startRound()
-    }    
+    startRound()  
 }
 
 async function startRound() {
-    
+    $('#advanceButton').css('display', 'none');
+    roundOf = roundOf = activePlayerArray.slice();
+    updateLabel(roundOf.length);
+    activeWinner = [];
     winnerJ = [];
     winnerL = [];
     let i = 0;
@@ -87,20 +97,16 @@ async function startRound() {
         changeActivePlayer();
         await startDuel(i);
         changeActivePlayer();
-        console.log(savedImagesJ.length+"J")
-        console.log(winnerJ.length+"jWinner")
-        console.log(savedImagesL.length+"L")
-        console.log(winnerL.length+"lWinner")
         i++
     }
-    console.log("loop broken");
     if(winnerJ.length %2 == 0 && winnerL.length %2 == 0) {
-        return
+        $('#advanceButton').css('display', 'block');
+    } else if(savedImagesJ.length == 1 && savedImagesL.length == 1){
+        console.log("finished")
+        window.location.href = "index.html";
     } else {
-        startJokerRound();
+        $('#jokerButton').css('display', 'block');       
     }
-    savedImagesJ = winnerJ;
-    savedImagesL = winnerL;
 }
 
 async function startDuel(i) {
@@ -113,21 +119,41 @@ async function startDuel(i) {
 }
 
 async function startJokerRound() {
-    while(winnerJ.length %2 == 0 && winnerL.length %2 == 0){
+    $('#jokerButton').css('display', 'none');
+    while(winnerJ.length %2 != 0 || winnerL.length %2 != 0){
         await startJokerDuel();
-        changeActivePlayer();
+        changeActivePlayerJoker();
         await startJokerDuel();
-        changeActivePlayer();
+        changeActivePlayerJoker();
     }
-}
+    $('#advanceButton').css('display', 'block');
+} 
 
 async function startJokerDuel() {
     activeArray = activePlayerArray;
-    currentImage=0;
+    currentImage = 0;
     changeImage(activeArray[0]);
+    updateLabel("Joker");
     const winner = await waitForEnter();
     updateJoker(winner);
-    return
+    return;
+}
+
+function changeActivePlayerJoker() {
+    if(activePlayer === "Janik") {   
+        winnerJ = activeWinner;
+        savedImagesJ = winnerJ;
+        activePlayer = "Lukas";
+        activePlayerArray = savedImagesL;
+        activeWinner = winnerL;
+    } else if (activePlayer === "Lukas") {
+        winnerL = activeWinner;
+        savedImagesL = winnerL;
+        activePlayer = "Janik";
+        activePlayerArray = savedImagesJ;
+        activeWinner = winnerJ;
+    }
+    updateLabel("Joker");
 }
 
 function changeActivePlayer() {
@@ -144,21 +170,21 @@ function changeActivePlayer() {
         activePlayerArray = savedImagesJ;
         activeWinner = winnerJ;
     }
+    shuffleArray(activePlayerArray);
+    updateLabel(roundOf.length);
 }
 function updateArrays(element) {
-    activeWinner.push(element);
-    
+    console.log("roundOf:", roundOf.length);
+    activeWinner.push(element);    
     // Find the index of the element
-    const index = activePlayerArray.indexOf(element);
-    
+    const index = activePlayerArray.indexOf(element);    
     // If the element exists, remove it using splice
     if (index !== -1) {
         activePlayerArray.splice(index, 1);
     }
-
+    console.log("roundOf:", roundOf.length);
     return;
 }
-
 
 function updateJoker(element) {
     activeWinner.push(element);
@@ -167,17 +193,31 @@ function updateJoker(element) {
 
 function waitForEnter() {
     return new Promise((resolve) => {
-        function onKeyPress(event) {
+        onKeyPress = function(event) {
             if (event.key === "Enter") {
                 document.removeEventListener("keydown", onKeyPress);
-                
+
                 // Get the src of the image element
                 const imageElement = document.getElementById("mainImage");
                 const imageSrc = imageElement ? imageElement.src : null;
 
                 resolve(imageSrc); // Resolve with image src
             }
-        }
+        };
         document.addEventListener("keydown", onKeyPress);
     });
 }
+
+function updateLabel(inputCase) {
+    switch (inputCase) {
+        case 2: msg="Finale "+activePlayer; break;
+        case 4: msg="Halbfinale "+activePlayer; break;
+        case 8: msg="Viertefinale "+activePlayer; break;
+        case 16: msg="Achtefinale "+activePlayer; break;
+        case "Joker": msg="Joker "+activePlayer; break;  
+        default: msg="Round of "+inputCase+" "+activePlayer   
+    }
+    $('#activeRound').html(msg);
+};    
+
+

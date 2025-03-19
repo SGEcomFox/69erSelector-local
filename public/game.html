@@ -13,28 +13,26 @@
         
         <div id="sideBar" class="sideBar">
             <div id="cornerContainer">
-                <div id="counterZone" name="counterZone" class="counterZone">
-                    <div id="indexZone">
-                        <input id="indexInput" class="indexInput" type="text">
-                        <label id="index" name="index" class="index"></label>
-                    </div>      
-                    <label id="counter" name="counter" class="counter"></label>
+                <div class="activeRoundZone">
+                    <label id="activeRound" name="activeRound" class="activeRound"></label>
                 </div>
-                <button id="importButton" name="importButton" class="cornerButton"> Import </button>
-                <button id="overviewButton" name="overviewButton" class="cornerButton"> Overview </button>
-                <button id="clearButton" name="clearButton" class="cornerButton"> Clear </button>
             </div>
         </div>
         <div id="main" class="main">
             <div id="dialogBox" name="dialogBox" class="dialogBox">
                 <label id="dialogBoxText" name="dialogBoxText" class="dialogBoxText"> saved for Janik </label>
             </div>
+            <button id="linkButton" name="linkButton" class="hiddenButton"> 
+                <label id="linkText" name="linkText" class="linkText"> link to original  </label>
+            </button>  
+            <button id="jokerButton" name="jokerButton" class="hiddenButton"> 
+                <label class="hiddenButtonText"> Joker </label>
+            </button> 
+            <button id="advanceButton" name="advanceButton" class="hiddenButton"> 
+                <label class="hiddenButtonText"> Advance  </label>
+            </button>  
             <img src="/ressources/placeholder.jpg" id="mainImage" name="mainImage" class="mainImage">   
-        </div>
-        
-        <button id="linkButton" name="linkButton" class="linkButton"> 
-            <label id="linkText" name="linkText" class="linkText"> link to original  </label>
-        </button>          
+        </div>         
     </body>
 </html>
 

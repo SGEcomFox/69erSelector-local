@@ -70,13 +70,22 @@ body {
   padding: 0 3vw;
 }
 
-
 .counterZone {
   display: flex;
   justify-content: center;
   align-items: center;
   height:4vw;
   width: 12vw;
+  margin: 0.2vh 0;
+  border-radius: 15px;
+  background-color: rgb(60, 60, 60);
+}
+.activeRoundZone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:6vw;
+  width: 14vw;
   margin: 0.2vh 0;
   border-radius: 15px;
   background-color: rgb(60, 60, 60);
@@ -105,6 +114,13 @@ body {
   color:white;
   font-size: clamp(2vw, 2.5vw, 3vw);
 }
+.activeRound {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color:white;
+  font-size: clamp(1.5vw, 2vw, 2.5vw);
+}
 .index:hover {
   color: rgb(0, 120, 218);
   cursor:pointer;
@@ -119,6 +135,34 @@ body {
   color: rgb(0, 120, 218);
   cursor:pointer;
 }
+.hiddenButton {
+  display: flex;
+  display: none;
+  align-items: center;
+  position: absolute;
+  border: none;
+  outline: none;
+  width: auto;
+  height: 9vh;
+  border-radius: 20px;
+  opacity: 100%;
+  background-color: rgb(60, 60, 60);
+  bottom: 15vh; 
+  cursor:pointer;
+}
+.hiddenButton:hover {
+  opacity: 1;
+  cursor:pointer; 
+}
+.hiddenButton:hover .hiddenButtonText {
+  color: rgb(0, 120, 218);
+  cursor:pointer;
+}
+.hiddenButtonText {
+  font-size: 6vh;
+  color: white;
+  padding: 0 3vw;
+}
 .linkButton {
   display: flex;
   align-items: center;
@@ -128,12 +172,12 @@ body {
   width: auto;
   height: 9vh;
   border-radius: 20px;
-  opacity: 0;
+  opacity: 0%;
   background-color: rgb(60, 60, 60);
   bottom: 15vh; 
   cursor:pointer;
 }
-.linkButton:hover {
+#linkButton:hover {
   opacity: 1;
   cursor:pointer; 
 }
@@ -146,7 +190,6 @@ body {
   color: white;
   padding: 0 3vw;
 }
-
 .collageZone {
   width:33%;
   margin: 0 0.2vw;
