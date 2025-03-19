@@ -228,6 +228,7 @@ async function importHTML(event) {
     try {
         const htmlContent = await readFile(file);
         bookmarks = convertHTMLtoArray(htmlContent);
+        console.log(bookmarks.length);
         
         
         // **Reset length before assigning new bookmarks**
@@ -271,6 +272,7 @@ function convertHTMLtoArray(htmlContent) {
             key: index,
             value: link.href,
         }));
+        
     } else {
         console.log("No folder called 69er found.");
         return [];

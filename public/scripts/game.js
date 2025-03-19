@@ -35,8 +35,10 @@ function buildDom() {
         startJokerRound();
     })
     $('#advanceButton').click(function(){
-        savedImagesJ = winnerJ;
-        savedImagesL = winnerL;
+        savedImagesJ = [...winnerJ];  // Ensure a copy is made, not a reference
+        savedImagesL = [...winnerL];
+        winnerJ = [];  // Reset winners for next round
+        winnerL = [];
         startRound();
     })
 }
@@ -87,6 +89,9 @@ async function startGame() {
 async function startRound() {
     $('#advanceButton').css('display', 'none');
     roundOf = roundOf = activePlayerArray.slice();
+    shuffleArray(activePlayerArray);
+    shuffleArray(savedImagesJ);
+    shuffleArray(savedImagesL);
     updateLabel(roundOf.length);
     activeWinner = [];
     winnerJ = [];
@@ -170,7 +175,6 @@ function changeActivePlayer() {
         activePlayerArray = savedImagesJ;
         activeWinner = winnerJ;
     }
-    shuffleArray(activePlayerArray);
     updateLabel(roundOf.length);
 }
 function updateArrays(element) {
